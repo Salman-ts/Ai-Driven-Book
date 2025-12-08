@@ -1,0 +1,144 @@
+/* Global Imports */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap');
+
+:root {
+  /* =========================================
+     LIGHT MODE: "Google Campus" (Restored)
+     Clean, Educational, Approachable
+  ========================================= */
+  --ifm-color-primary: #1A73E8;
+  /* Google Blue */
+  --ifm-color-primary-dark: #1557B0;
+  --ifm-color-primary-darker: #0E3C7E;
+  --ifm-color-primary-darkest: #0A2B5B;
+  --ifm-color-primary-light: #4285F4;
+  --ifm-color-primary-lighter: #8AB4F8;
+  --ifm-color-primary-lightest: #D2E3FC;
+
+  --ifm-code-font-size: 95%;
+  --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.1);
+
+  /* Typography */
+  --ifm-font-family-base: 'Inter', system-ui, -apple-system, sans-serif;
+  --ifm-font-family-monospace: 'JetBrains Mono', monospace;
+  --ifm-heading-font-family: 'Outfit', sans-serif;
+
+  /* Surfaces */
+  --ifm-background-color: #FFFFFF;
+  --ifm-background-surface-color: #F8F9FA;
+  --ifm-font-color-base: #202124;
+
+  /* Utils */
+  --glass-background: rgba(255, 255, 255, 0.95);
+  --glass-border: 1px solid rgba(0, 0, 0, 0.1);
+  --glass-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+
+  --ifm-global-radius: 8px;
+  --ifm-navbar-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+[data-theme='dark'] {
+  /* =========================================
+     DARK MODE: "AI Native" (Maintained)
+     Professional, Slate/Violet, High Contrast
+  ========================================= */
+  --ifm-color-primary: #a78bfa;
+  /* Violet-400 */
+  --ifm-color-primary-dark: #8b5cf6;
+  --ifm-color-primary-darker: #7c3aed;
+  --ifm-color-primary-darkest: #6d28d9;
+  --ifm-color-primary-light: #c4b5fd;
+  --ifm-color-primary-lighter: #ddd6fe;
+  --ifm-color-primary-lightest: #ede9fe;
+
+  --ifm-background-color: #0f172a;
+  /* Slate-900 */
+  --ifm-background-surface-color: #1e293b;
+  /* Slate-800 */
+  --ifm-font-color-base: #f8fafc;
+  /* Slate-50 */
+
+  --ifm-navbar-background-color: #1e293b;
+  --ifm-card-background-color: #1e293b;
+
+  --glass-background: rgba(30, 41, 59, 0.7);
+  --glass-border: 1px solid rgba(148, 163, 184, 0.1);
+}
+
+/* =========================================
+   TYPOGRAPHY & GLOBAL 
+========================================= */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--ifm-heading-font-family);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+h1 {
+  font-weight: 800;
+  margin-bottom: 1.5rem;
+}
+
+/* Light mode heading color */
+[data-theme='light'] h1,
+[data-theme='light'] h2,
+[data-theme='light'] h3 {
+  color: #1a73e8;
+  /* Google Blue */
+}
+
+/* Dark mode heading color */
+[data-theme='dark'] h1,
+[data-theme='dark'] h2,
+[data-theme='dark'] h3 {
+  color: #e2e8f0;
+}
+
+/* =========================================
+   COMPONENTS
+========================================= */
+
+/* Navbar */
+.navbar {
+  border-bottom: 1px solid var(--ifm-color-emphasis-200);
+}
+
+.navbar__title {
+  font-weight: 800;
+  font-family: var(--ifm-heading-font-family);
+}
+
+/* Buttons */
+.button {
+  border-radius: 50px;
+  /* Pill shape */
+  font-weight: 600;
+  text-transform: none;
+  letter-spacing: 0.02em;
+}
+
+.button--primary {
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+/* Chat Widget Button */
+.chat-toggle {
+  background-color: var(--ifm-color-primary) !important;
+  color: white !important;
+  border-radius: 50px !important;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.15) !important;
+}
+
+/* Images */
+article img {
+  border-radius: 8px;
+  border: 1px solid var(--ifm-color-emphasis-200);
+  box-shadow: var(--glass-shadow);
+  max-width: 100%;
+}

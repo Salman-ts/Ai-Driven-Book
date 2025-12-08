@@ -1,0 +1,33 @@
+# AI Book Backend Configuration
+# 1. RENAME THIS FILE TO .env
+# 2. REPLACE THE VALUES BELOW
+
+# ==================================
+# 1. OpenAI (Required for RAG & Content)
+# ==================================
+OPENAI_API_KEY=sk-proj-YOUR_OPENAI_KEY_HERE
+
+# ==================================
+# 2. Neon Postgres (Required for DB)
+# ==================================
+# Format: postgresql://<user>:<password>@<endpoint>.neon.tech/<dbname>?sslmode=require
+NEON_DSN=postgresql://neondb_owner:password@ep-project-123456.us-east-2.aws.neon.tech/neondb?sslmode=require
+
+# ==================================
+# 3. Qdrant Cloud (Required for Vector Search)
+# ==================================
+QDRANT_URL=https://xyz-example.u.qdrant.io:6333
+QDRANT_API_KEY=your_qdrant_cloud_api_key
+
+# ==================================
+# 4. Better Auth (Required for Authentication)
+# ==================================
+# Generate a secret: openssl rand -hex 32
+BETTER_AUTH_SECRET=long_random_secret_string_here
+BETTER_AUTH_URL=http://localhost:8000
+
+# ==================================
+# 5. Optional Settings
+# ==================================
+PROJECT_NAME="AI Book Backend"
+EMBEDDING_MODEL="text-embedding-3-large"
