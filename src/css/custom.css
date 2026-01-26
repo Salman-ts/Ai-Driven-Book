@@ -104,41 +104,269 @@ h1 {
    COMPONENTS
 ========================================= */
 
-/* Navbar */
+/* Navbar - Modern Glassmorphism */
 .navbar {
-  border-bottom: 1px solid var(--ifm-color-emphasis-200);
+  background: var(--glass-background);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: var(--glass-border);
+  box-shadow: var(--ifm-navbar-shadow);
+  transition: all 0.3s ease;
+}
+
+[data-theme='dark'] .navbar {
+  background: rgba(15, 23, 42, 0.85);
+  border-bottom: 1px solid rgba(139, 92, 246, 0.1);
 }
 
 .navbar__title {
   font-weight: 800;
   font-family: var(--ifm-heading-font-family);
+  background: linear-gradient(135deg, var(--ifm-color-primary) 0%, var(--ifm-color-primary-light) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.navbar__link {
+  font-weight: 500;
+  transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.navbar__link:hover {
+  color: var(--ifm-color-primary);
+  transform: translateY(-1px);
+}
+
+/* Navbar Auth Buttons - using class names from docusaurus.config.js */
+.navbar-signin-btn {
+  padding: 0.5rem 1.25rem !important;
+  border-radius: 50px !important;
+  font-weight: 600 !important;
+  transition: all 0.2s ease !important;
+  border: 2px solid var(--ifm-color-primary) !important;
+  margin-left: 0.5rem !important;
+}
+
+.navbar-signin-btn:hover {
+  background: var(--ifm-color-primary) !important;
+  color: white !important;
+}
+
+.navbar-signup-btn {
+  padding: 0.5rem 1.25rem !important;
+  border-radius: 50px !important;
+  font-weight: 600 !important;
+  transition: all 0.2s ease !important;
+  background: linear-gradient(135deg, var(--ifm-color-primary) 0%, var(--ifm-color-primary-light) 100%) !important;
+  color: white !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15) !important;
+  margin-left: 0.5rem !important;
+}
+
+.navbar-signup-btn:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25) !important;
+  color: white !important;
+}
+
+/* Dark mode specific - ensure visibility */
+[data-theme='dark'] .navbar-signin-btn {
+  border-color: #a78bfa !important;
+  color: #a78bfa !important;
+}
+
+[data-theme='dark'] .navbar-signin-btn:hover {
+  background: #7c3aed !important;
+  color: white !important;
 }
 
 /* Buttons */
 .button {
   border-radius: 50px;
-  /* Pill shape */
   font-weight: 600;
   text-transform: none;
   letter-spacing: 0.02em;
+  transition: all 0.2s ease;
 }
 
 .button--primary {
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  background: linear-gradient(135deg, var(--ifm-color-primary) 0%, var(--ifm-color-primary-light) 100%);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.15);
+}
+
+.button--primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+}
+
+.button--secondary {
+  border: 2px solid var(--ifm-color-primary);
+  background: transparent;
 }
 
 /* Chat Widget Button */
 .chat-toggle {
-  background-color: var(--ifm-color-primary) !important;
+  background: linear-gradient(135deg, var(--ifm-color-primary) 0%, var(--ifm-color-primary-light) 100%) !important;
   color: white !important;
   border-radius: 50px !important;
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.15) !important;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2) !important;
+  transition: all 0.3s ease !important;
+}
+
+.chat-toggle:hover {
+  transform: scale(1.05) !important;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3) !important;
+}
+
+/* Footer - Modern Premium Design */
+.footer {
+  background: linear-gradient(180deg, var(--ifm-background-surface-color) 0%, var(--ifm-background-color) 100%);
+  border-top: 1px solid var(--ifm-color-emphasis-200);
+  padding: 3rem 0 2rem;
+}
+
+/* Light mode footer - dark text */
+.footer--dark {
+  --ifm-footer-background-color: #1e293b;
+  --ifm-footer-color: #e2e8f0;
+  --ifm-footer-link-color: #e2e8f0;
+  --ifm-footer-title-color: #f8fafc;
+}
+
+/* Override dark footer in light mode */
+[data-theme='light'] .footer--dark {
+  --ifm-footer-background-color: #f8f9fa;
+  --ifm-footer-color: #1e293b;
+  --ifm-footer-link-color: #374151;
+  --ifm-footer-title-color: #1A73E8;
+  background: linear-gradient(180deg, #f8f9fa 0%, #ffffff 100%) !important;
+}
+
+[data-theme='light'] .footer--dark .footer__title {
+  color: #1A73E8 !important;
+}
+
+[data-theme='light'] .footer--dark .footer__link-item {
+  color: #374151 !important;
+}
+
+[data-theme='light'] .footer--dark .footer__link-item:hover {
+  color: #1A73E8 !important;
+}
+
+[data-theme='light'] .footer--dark .footer__copyright {
+  color: #6b7280 !important;
+}
+
+[data-theme='dark'] .footer {
+  background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
+  border-top: 1px solid rgba(139, 92, 246, 0.1);
+}
+
+.footer__title {
+  font-family: var(--ifm-heading-font-family);
+  font-weight: 700;
+  color: var(--ifm-color-primary);
+  margin-bottom: 1rem;
+}
+
+.footer__link-item {
+  transition: color 0.2s ease, transform 0.2s ease;
+  display: inline-block;
+}
+
+.footer__link-item:hover {
+  color: var(--ifm-color-primary);
+  transform: translateX(4px);
+}
+
+.footer__copyright {
+  font-size: 0.875rem;
+  color: var(--ifm-font-color-secondary);
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--ifm-color-emphasis-200);
 }
 
 /* Images */
 article img {
-  border-radius: 8px;
+  border-radius: 12px;
   border: 1px solid var(--ifm-color-emphasis-200);
-  box-shadow: var(--glass-shadow);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   max-width: 100%;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+article img:hover {
+  transform: scale(1.01);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+}
+
+/* Cards */
+.card {
+  border-radius: 12px;
+  border: 1px solid var(--ifm-color-emphasis-200);
+  background: var(--glass-background);
+  transition: all 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.1);
+}
+
+/* Sidebar */
+.menu__link {
+  border-radius: 8px;
+  transition: all 0.2s ease;
+}
+
+.menu__link--active {
+  background: var(--ifm-color-primary-lightest);
+  font-weight: 600;
+}
+
+[data-theme='dark'] .menu__link--active {
+  background: rgba(139, 92, 246, 0.15);
+}
+
+/* TOC */
+.table-of-contents__link {
+  transition: color 0.2s ease;
+}
+
+.table-of-contents__link--active {
+  font-weight: 600;
+  color: var(--ifm-color-primary);
+}
+
+/* Admonitions */
+.admonition {
+  border-radius: 12px;
+  border-left-width: 4px;
+}
+
+/* Code blocks */
+.prism-code {
+  border-radius: 12px;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--ifm-background-surface-color);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--ifm-color-emphasis-400);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--ifm-color-emphasis-500);
 }

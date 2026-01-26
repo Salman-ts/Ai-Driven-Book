@@ -44,23 +44,6 @@ Grounding is the central challenge in embodied AI. An LLM's abstract knowledge m
                                  (Structured JSON Output)
 ```
 
-### System Diagram
-
-```ascii
-+-----------------+      +-----------------+      +-----------------+
-|  Human Command  |----->|       LLM       |----->|  Robot Action   |
-| ("Get the       |      | (Task Planner)  |      |  (Executor)     |
-|   blue cube")   |      +-----------------+      +-----------------+
-+-----------------+              |                        ^
-                                 | Chooses tool & args    | Executes
-                                 v                        |
-                         +-----------------------------+
-                         | {"tool": "grasp_object",    |
-                         |  "args": {"name": "blue_cube"}} |
-                         +-----------------------------+
-                                 (Structured JSON Output)
-```
-
 ---
 
 ## Lab: Using an LLM as a Robot Planner

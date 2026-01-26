@@ -15,7 +15,6 @@ For a simulation to be meaningful, Gazebo's physics engine needs to know about y
 :::danger
 An incorrect inertia tensor is a common source of bizarre and unrealistic simulation behavior. Tools like Blender or SolidWorks can help calculate this accurately for complex shapes.
 :::
- An incorrect inertia tensor is a common source of bizarre simulation behavior.
 
 -   **`<collision>`**: This tag defines the shape of the link for physics calculations. It's often a simpler version of the visual model to ensure fast and stable collision detection.
 
@@ -36,30 +35,7 @@ Since URDF is a general format, we need a way to add Gazebo-specific information
               | Parsed by...
               v
 +-----------------------------+      +---------------------------+
-|    Gazebo Simulator         |<---->|   ROS 2 Control Plugin    |
-| (Spawns robot, runs physics)|      | (Reads joints, writes cmds) |
-+-----------------------------+      +---------------------------+
-              ^
-              |
-              | Receives velocity commands
-              |
-+-----------------------------+
-|  /cmd_vel (Twist message)   |
-+-----------------------------+
-```
-
-### System Diagram
-
-```ascii
-+-----------------------------+
-|        URDF File            |
-| (+ <gazebo> extensions)     |
-+-----------------------------+
-              |
-              | Parsed by...
-              v
-+-----------------------------+      +---------------------------+
-|    Gazebo Simulator         |<---->|   ROS 2 Control Plugin    |
+|    Gazebo Simulator         |<--->|   ROS 2 Control Plugin    |
 | (Spawns robot, runs physics)|      | (Reads joints, writes cmds) |
 +-----------------------------+      +---------------------------+
               ^

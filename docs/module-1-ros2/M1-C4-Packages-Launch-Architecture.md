@@ -50,34 +50,6 @@ For very large projects, you might encounter **metapackages**. A metapackage is 
     +-----> (my_subscriber_node)
 ```
 
-### System Diagram
-
-```ascii
-+------------------------------+
-|   Top-Level Launch File      |
-|    (robot_bringup.launch.py) |
-+------------------------------+
-    |
-    | Includes...
-    |
-    +-----> +--------------------------+
-    |       |   Display Launch File    |
-    |       |  (display.launch.py)     |
-    |       +--------------------------+
-    |           |
-    |           +-----> (robot_state_publisher)
-    |           |
-    |           +-----> (joint_state_publisher_gui)
-    |           |
-    |           +-----> (rviz2)
-    |
-    | Starts...
-    |
-    +-----> (my_publisher_node)
-    |
-    +-----> (my_subscriber_node)
-```
-
 ---
 
 ## Lab: Refactoring into a Professional Project Structure

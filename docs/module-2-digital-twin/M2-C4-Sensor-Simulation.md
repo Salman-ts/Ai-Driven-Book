@@ -41,28 +41,6 @@ This is typically done by creating a new link for the sensor (e.g., `laser_link`
             +----------------+
 ```
 
-### System Diagram
-
-```ascii
-+-----------------------------+
-|    Gazebo Simulator         |
-| +-------------------------+ |
-| |   Sensor Plugins        | |
-| | (LIDAR, Camera)         | |
-| +-------------------------+ |
-+-----------------------------+
-    |           |
-    | Publishes | Publishes
-    | LaserScan | Image
-    v           v
-[ /scan ]   [ /image_raw ] (Topics)
-    |           |
-    |           |
-    +-----> +----------------+
-            |     RViz2      |
-            +----------------+
-```
-
 ---
 
 ## Lab: Adding a LIDAR and Camera

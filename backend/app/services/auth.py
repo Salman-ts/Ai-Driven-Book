@@ -1,21 +1,106 @@
-from fastapi import HTTPException, Header
-# Better Auth integration usually involves validating the session Cookie or Header.
-# Since we might be using the Better-Auth Node.js server or a Python adapter if it existed (it is currently JS centric),
-# we assume we verify the token/session via an API call to the Better-Auth server or DB check.
+from fastapi import HTTPException, Header, Depends, status
+from jose import jwt, JWTError
+from datetime import datetime
+from app.core.config import settings
+from typing import Optional, Dict, Any
+import secrets
 
-# For this plan, we will assume we read the session from the DB or verify JWT.
-# The prompt asked for "Better-Auth integration setup".
+async def verify_jwt(token: str) -> Dict[str, Any]:
+    """
+    Verify Better-Auth JWT and extract user claims.
+    We assume Better-Auth signs with HS256 and the shared secret.
+    """
+    try:
+        payload = jwt.decode(
+            token, 
+            settings.BETTER_AUTH_SECRET, 
+            algorithms=["HS256"]
+        )
+        
+        # Check expiry
+        exp = payload.get("exp")
+        if exp and datetime.utcfromtimestamp(exp) < datetime.utcnow():
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED, 
+                detail="Token expired",
+                headers={"WWW-Authenticate": "Bearer"},
+            )
+            
+        return payload
+    except JWTError:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Could not validate credentials",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
 
-# We will create a dependency to get the current user.
-
-async def get_current_user(authorization: str = Header(None)):
+async def verify_admin(
+    authorization: Optional[str] = Header(None)
+) -> Dict[str, Any]:
+    """
+    Dependency to verify admin access.
+    Checks for:
+    1. Static ADMIN_API_KEY (Machine-to-machine)
+    2. 'admin' role in JWT claims (User-based)
+    """
     if not authorization:
-        # For development, allow unauthenticated or mock
-        # raise HTTPException(status_code=401, detail="Missing authentication")
-        return {"id": "mock-user-id", "name": "Mock User"}
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Missing authentication",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
 
-    # TODO: Implement actual Better-Auth verification
-    # 1. Verify JWT signature if using JWT
-    # 2. Or query Better-Auth session table in Postgres
+    scheme, _, token = authorization.partition(" ")
+    if scheme.lower() != "bearer":
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Invalid authentication scheme",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+
+    # 1. Check Static Key
+    if settings.ADMIN_API_KEY:
+        # Secure constant-time comparison
+        # Strip whitespace from token just in case
+        clean_token = token.strip()
+        if secrets.compare_digest(clean_token, settings.ADMIN_API_KEY):
+            return {"sub": "system-admin", "role": "admin"}
+
+    # 2. Check JWT Role
+    try:
+        payload = await verify_jwt(token)
+        if payload.get("role") != "admin":
+             raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail="Insufficient permissions",
+            )
+        return payload
+    except HTTPException as e:
+        # Re-raise authentication errors
+        raise e
+    except Exception:
+         raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Could not validate admin credentials",
+        )
+
+async def get_current_user(authorization: Optional[str] = Header(None)) -> Dict[str, Any]:
+    """
+    Dependency to get the current user from Bearer token.
+    """
+    if not authorization:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Missing authentication",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
     
-    return {"id": "valid-user-id", "name": "Test User"}
+    scheme, _, token = authorization.partition(" ")
+    if scheme.lower() != "bearer":
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Invalid authentication scheme",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+        
+    return await verify_jwt(token)

@@ -1,51 +1,47 @@
-import asyncio
-import os
-import sys
-import asyncpg
-from qdrant_client import QdrantClient
-
-# Add parent dir
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-
+import cohere
 from app.core.config import settings
+import sys
 
-async def verify_infrastructure():
-    print("🔍 Starting Infrastructure Verification...\n")
+def verify_cohere():
+    print(f"Testing Cohere Connection...")
+    print(f"API Key: {settings.COHERE_API_KEY[:5]}... (Length: {len(settings.COHERE_API_KEY)})")
     
-    # 1. Verify Neon Postgres
-    print(f"1. Testing Neon Postgres Connection...")
     try:
-        conn = await asyncpg.connect(settings.NEON_DSN)
-        version = await conn.fetchval("SELECT version()")
-        print(f"   ✅ Connected to Postgres! Version: {version}")
-        await conn.close()
+        client = cohere.ClientV2(api_key=settings.COHERE_API_KEY)
+        
+        # Simple generation test
+        response = client.chat(
+            model="command-r-plus-08-2024",
+            messages=[{"role": "user", "content": "Say hello!"}]
+        )
+        print(f"Success! Response: {response.message.content[0].text}")
+        return True
     except Exception as e:
-        print(f"   ❌ Postgres Connection Failed: {e}")
+        print(f"Cohere Error: {e}")
+        return False
 
-    # 2. Verify Qdrant Cloud
-    print(f"\n2. Testing Qdrant Cloud Connection...")
+def verify_qdrant():
+    print(f"\nTesting Qdrant Connection...")
+    from qdrant_client import QdrantClient
     try:
         client = QdrantClient(
             url=settings.QDRANT_URL,
             api_key=settings.QDRANT_API_KEY
         )
         collections = client.get_collections()
-        print(f"   ✅ Connected to Qdrant! Found {len(collections.collections)} collections.")
+        print(f"Success! Collections: {[c.name for c in collections.collections]}")
+        return True
     except Exception as e:
-        print(f"   ❌ Qdrant Connection Failed: {e}")
-
-    # 3. Verify OpenAI (Simple Model Check)
-    # Optional, uncomment if you want to test API key
-    # print(f"\n3. Testing OpenAI Connection...")
-    # try:
-    #     from openai import AsyncOpenAI
-    #     ai = AsyncOpenAI(api_key=settings.OPENAI_API_KEY)
-    #     await ai.models.list()
-    #     print(f"   ✅ Connected to OpenAI!")
-    # except Exception as e:
-    #     print(f"   ❌ OpenAI Connection Failed: {e}")
-
-    print("\n🏁 Verification Complete.")
+        print(f"Qdrant Error: {e}")
+        return False
 
 if __name__ == "__main__":
-    asyncio.run(verify_infrastructure())
+    c_ok = verify_cohere()
+    q_ok = verify_qdrant()
+    
+    if c_ok and q_ok:
+        print("\nAll systems GO.")
+        sys.exit(0)
+    else:
+        print("\nConnection verification FAILED.")
+        sys.exit(1)

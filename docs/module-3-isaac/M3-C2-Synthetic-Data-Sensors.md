@@ -43,33 +43,6 @@ Domain Randomization is a critical technique for training AI models robust enoug
                                           +-----------------+
 ```
 
-### System Diagram
-
-```ascii
-+-----------------------------+
-|    Isaac Sim Python Script  |
-+-----------------------------+
-    |           |           |
-    | Controls  | Triggers  | Randomizes
-    v           v           v
-+-----------------------------+
-|      Isaac Sim Engine       |
-|  (Physics, Rendering, etc.) |
-+-----------------------------+
-    |
-    | Generates...
-    v
-+-----------------------------+      +-----------------------------+
-|    Raw Sensor Data          |----->|      Replicator Writers     |
-| (RGB, Depth, Segmentation)  |      +-----------------------------+
-+-----------------------------+                    |
-                                                   v
-                                          +-----------------+
-                                          | Labeled Dataset |
-                                          | (Images & JSON) |
-                                          +-----------------+
-```
-
 ---
 
 ## Lab: Generating a Labeled Dataset

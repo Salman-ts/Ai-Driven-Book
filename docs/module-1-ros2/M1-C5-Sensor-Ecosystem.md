@@ -35,26 +35,6 @@ A key part of every sensor message is the `header`, which contains a `timestamp`
                    +-----------------------+
 ```
 
-### System Diagram
-
-```ascii
-+--------------------------+
-|  /simulated_lidar_node   |
-+--------------------------+
-           |
-           | Publishes LaserScan messages
-           |
-     [ /scan ] (Topic)
-           |
-           +-----> +-----------------------+
-           |       | /sensor_subscriber_node |
-           |       +-----------------------+
-           |
-           +-----> +-----------------------+
-                   |         RViz2         |
-                   +-----------------------+
-```
-
 ---
 
 ## Lab: Adding a LIDAR to Your Robot

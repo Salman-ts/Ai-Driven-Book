@@ -42,25 +42,6 @@ A URDF model represents a robot as a tree of **links** connected by **joints**.
 ```
 The `joint_state_publisher_gui` lets you move sliders. The `robot_state_publisher` reads the URDF and the joint angles, calculates the 3D pose of each link, and publishes this information as coordinate transforms. RViz2 then uses these transforms and the URDF's visual tags to draw the robot.
 
-### System Diagram
-
-```ascii
-+---------------------------+      +---------------------------+
-| joint_state_publisher_gui |----->|   robot_state_publisher   |
-+---------------------------+      +---------------------------+
-             |                                  |
-             | Publishes joint angles           | Publishes coordinate transforms
-             |                                  |
-   [ /joint_states ] (Topic)          [ /tf ] & [ /robot_description ] (Topics)
-             |                                  |
-             +----------------------------------+
-                               |
-                               v
-                       +----------------+
-                       |     RViz2      |
-                       +----------------+
-```
-
 ---
 
 ## Lab: Building a Robot Arm in URDF

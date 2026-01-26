@@ -29,18 +29,6 @@ OpenAI Whisper is an exceptionally versatile and accurate STT model. Its ability
                     [ /audio/raw ]     [ /voice/command ]     (Calls robot actions)
 ```
 
-### System Diagram
-
-```ascii
-+-------------+      +------------------+      +-----------------+      +------------------+
-| Microphone  |----->| Audio Input Node |----->|  STT Node       |----->| Orchestrator Node|
-+-------------+      +------------------+      +-----------------+      +------------------+
-                        | Publishes Raw    |      | (Whisper)       |      | (Sends to LLM)   |
-                        | Audio            |      | Publishes Text  |      +------------------+
-                        v                  v      v                 v              |
-                    [ /audio/raw ]     [ /voice/command ]     (Calls robot actions)
-```
-
 ---
 
 ## Lab: Building the Voice-to-Action Pipeline

@@ -1,6 +1,8 @@
-from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, Text, Boolean, JSON
+from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, Text, Boolean, JSON, Float
 from sqlalchemy.orm import declarative_base, relationship
 from datetime import datetime
+from sqlalchemy.dialects.postgresql import UUID
+import uuid
 
 Base = declarative_base()
 
@@ -49,3 +51,36 @@ class ChatLog(Base):
     timestamp = Column(DateTime, default=datetime.utcnow)
     
     user = relationship("User", back_populates="chat_logs")
+
+class DocumentChunk(Base):
+    __tablename__ = "document_chunks"
+
+    chunk_id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    doc_id = Column(String(255), nullable=False, index=True)
+    content = Column(Text, nullable=False)
+    content_hash = Column(String(64), nullable=False, index=True)
+    source_url = Column(String(512), nullable=False)
+    meta_data = Column(JSON, nullable=False)
+    token_count = Column(Integer, nullable=False)
+    qdrant_id = Column(UUID(as_uuid=True), nullable=False)
+    created_at = Column(DateTime, default=datetime.utcnow)
+
+class IngestionJob(Base):
+    __tablename__ = "ingestion_jobs"
+
+    id = Column(Integer, primary_key=True, index=True)
+    status = Column(String(50), nullable=False) # pending, processing, completed, failed
+    start_time = Column(DateTime, default=datetime.utcnow)
+    end_time = Column(DateTime, nullable=True)
+    chunks_processed = Column(Integer, default=0)
+    error_log = Column(Text, nullable=True)
+
+class QueryLog(Base):
+    __tablename__ = "query_logs"
+
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, nullable=True) # Nullable for anonymous
+    query_text = Column(Text, nullable=False)
+    mode = Column(String(50), nullable=False) # global, selection
+    latency_ms = Column(Float, nullable=True)
+    timestamp = Column(DateTime, default=datetime.utcnow)

@@ -12,8 +12,17 @@ class Settings(BaseSettings):
     QDRANT_URL: str
     QDRANT_API_KEY: Optional[str] = None
     
-    # OpenAI
-    OPENAI_API_KEY: str
+    # Gemini
+    GEMINI_API_KEY: str
+    
+    # Cohere
+    COHERE_API_KEY: str
+    
+    # Admin
+    ADMIN_API_KEY: Optional[str] = None
+    
+    # OpenAI (Deprecated or Optional now)
+    OPENAI_API_KEY: Optional[str] = None
     EMBEDDING_MODEL: str = "text-embedding-3-large"
     
     # Better Auth
@@ -22,5 +31,6 @@ class Settings(BaseSettings):
     
     class Config:
         env_file = ".env"
+        extra = "ignore"
 
 settings = Settings()
