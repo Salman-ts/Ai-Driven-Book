@@ -19,7 +19,7 @@ Here are the key elements of this network, which we call the **ROS 2 Graph**:
 -   **Launch Files**: These are scripts that start up and configure a whole team of nodes. As your robot gets more complex, launch files become essential for bringing the entire system online correctly.
 
 <div class="glass-card">
-  ![ROS 2 Graph City Analogy](file:///C:/Users/uni-tech/.gemini/antigravity/brain/b80e2a3e-5702-48d0-90f6-3c8eb152e5eb/ros2_graph_city_1765157957641.png)
+  ![ROS 2 Graph City Analogy](/img/chapters/ros2-graph-city.png)
   <details>
   <summary>🤖 <strong>AI Insight: Why "Nodes"?</strong></summary>
   <p>Think of <strong>Nodes</strong> like apps on your phone. One app handles the camera, another handles maps, and another plays music. In ROS 2, we break a robot's brain into these small "apps" so if one crashes (like the music player), the robot doesn't stop driving (the map app is still safe!).</p>
@@ -29,7 +29,7 @@ Here are the key elements of this network, which we call the **ROS 2 Graph**:
 ### System Diagram
 
 <div class="glass-card">
-  ![Teleop System Diagram](file:///C:/Users/uni-tech/.gemini/antigravity/brain/b80e2a3e-5702-48d0-90f6-3c8eb152e5eb/turtlesim_teleop_diagram_1765157979702.png)
+  ![Teleop System Diagram](/img/chapters/turtlesim-teleop.png)
   <div class="admonition admonition-info">
     <div class="admonition-heading">
       <h5>🔍 Deep Dive: The Data Flow</h5>

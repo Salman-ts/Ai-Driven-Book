@@ -29,19 +29,6 @@ Here's the basic structure of a Python ROS 2 node:
                        (Topic)
 ```
 
-### System Diagram
-
-```ascii
-+-----------------------+      +--------------------------+
-|  /my_publisher_node   |----->|     /my_subscriber_node  |
-+-----------------------+      +--------------------------+
-           |                             |
-           | Publishes String messages   | Subscribes to String messages
-           |                             |
-           +---------[ /chatter ]--------+
-                       (Topic)
-```
-
 ---
 
 ## Lab: Creating a Publisher and Subscriber

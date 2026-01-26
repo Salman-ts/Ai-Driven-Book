@@ -44,30 +44,6 @@ The `gazebo_ros2_control` plugin is essential for bridging the gap between the G
 +------------------------+      +------------------------+
 ```
 
-### System Diagram
-
-```ascii
-+------------------------+
-| teleop_twist_keyboard  |
-+------------------------+
-           |
-           | Publishes Twist messages
-           |
-     [ /cmd_vel ] (Topic)
-           |
-           v
-+------------------------+      +------------------------+
-| diff_drive_controller  |----->| gazebo_ros2_control    |
-+------------------------+      | (Plugin)               |
-           ^                      +------------------------+
-           |                             |         ^
-           | Reads joint states          | Reads   | Writes
-           |                             v         |
-+------------------------+      +------------------------+
-| joint_state_broadcaster|----->|     Simulated Joints   |
-+------------------------+      +------------------------+
-```
-
 ---
 
 ## Lab: Driving Your Robot in Gazebo

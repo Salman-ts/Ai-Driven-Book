@@ -35,24 +35,6 @@ NITROS is a fundamental innovation that enables real-time AI perception on edge 
                                                                 +----------------+
 ```
 
-### System Diagram
-
-```ascii
-+--------------------+      +---------------------------+      +---------------------+
-| RealSense Camera   |----->|   isaac_ros_image_proc    |----->| isaac_ros_detectnet |
-| (Publishes Raw Img)|      | (Rectifies & Converts Img)|      | (Runs AI Model)     |
-+--------------------+      +---------------------------+      +---------------------+
-                                       (NITROS-accelerated)             |
-                                                                        | Publishes Detections
-                                                                        v
-                                                                  [ /detections ] (Topic)
-                                                                        |
-                                                                        v
-                                                                +----------------+
-                                                                |     RViz2      |
-                                                                +----------------+
-```
-
 ---
 
 ## Lab: Running an Accelerated Perception Pipeline on Jetson

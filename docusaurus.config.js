@@ -37,20 +37,18 @@ const config = {
       ({
         docs: {
           sidebarPath: require.resolve('./src/sidebar.ts'),
-          // Please change this to your repo. For example: `https://github.com/facebook/docusaurus/edit/main/website/docs/
           editUrl: 'https://github.com/Salman-ts/ai-book/tree/main/',
         },
-        blog: {
-          showReadingTime: true,
-          // Please change this to your repo. For example: `https://github.com/facebook/docusaurus/edit/main/website/blog/
-          editUrl: 'https://github.com/Salman-ts/ai-book/tree/main/',
-        },
+        blog: false, // Disabled blog
         theme: {
           customCss: './src/css/custom.css',
         },
       }),
     ],
   ],
+
+  // Search plugin removed due to compatibility issues
+  // themes: [],
 
   themeConfig: {
     // Replace with your project's social card
@@ -68,89 +66,86 @@ const config = {
           position: 'left',
           label: 'Book',
         },
-        // Blog removed as requested
         {
           href: 'https://github.com/Salman-ts/ai-book',
           label: 'GitHub',
           position: 'right',
         },
         {
-          type: 'html',
+          to: '/signin',
+          label: 'Sign In',
           position: 'right',
-          value: '<a href="/signin" class="button button--secondary button--sm" style="margin-left: 10px; border-radius: 50px; font-weight: 600;">Sign In</a>',
+          className: 'navbar-signin-btn',
         },
         {
-          type: 'html',
+          to: '/signup',
+          label: 'Sign Up',
           position: 'right',
-          value: '<a href="/signup" class="button button--primary button--sm" style="margin-left: 10px; border-radius: 50px; font-weight: 600;">Sign Up</a>',
+          className: 'navbar-signup-btn',
         },
       ],
-    },
-    algolia: {
-      // The application ID provided by Algolia
-      appId: 'YOUR_APP_ID',
-      // Public API key: it is safe to commit it
-      apiKey: 'YOUR_SEARCH_API_KEY',
-      indexName: 'YOUR_INDEX_NAME',
-      // Optional: Algolia search parameters
-      searchParameters: {},
-      // Optional: path for search page that e.g. Docusaurus uses to display the results.
-      // E.g. /docs/search/
-      // contextualSearch: true,
-      // You can further tune the dictionary in client-algolia.config.js
-      // ...
     },
     footer: {
       style: 'dark',
       links: [
         {
-          title: 'Docs',
+          title: 'Learn',
           items: [
             {
-              label: 'Book',
-              to: '/docs/M1-ROS-2-The-Robotic-Nervous-System/M1-C1-ROS-2-Fundamentals',
+              label: '📚 Start Reading',
+              to: '/docs/intro',
+            },
+            {
+              label: '🤖 ROS 2 Fundamentals',
+              to: '/docs/module-1-ros2/M1-C1-ROS-2-Fundamentals',
+            },
+            {
+              label: '🎮 Digital Twins',
+              to: '/docs/module-2-digital-twin/M2-C1-Why-Digital-Twins-Matter',
             },
           ],
         },
         {
-          title: 'Community',
+          title: 'Resources',
           items: [
             {
-              label: 'Stack Overflow',
-              href: 'https://stackoverflow.com/questions/tagged/docusaurus',
+              label: '📦 NVIDIA Isaac',
+              to: '/docs/module-3-isaac/M3-C1-Isaac-Sim-Foundations',
             },
             {
-              label: 'Discord',
-              href: 'https://discordapp.com/invite/docusaurus',
-            },
-            {
-              label: 'Twitter',
-              href: 'https://twitter.com/docusaurus',
+              label: '🦾 VLA & Humanoids',
+              to: '/docs/module-4-vla-humanoids/M4-C1-VLA-Foundations',
             },
           ],
         },
         {
-          title: 'More',
+          title: 'Connect',
           items: [
             {
-              label: 'Blog',
-              to: '/blog',
-            },
-            {
-              label: 'GitHub',
+              label: '⭐ GitHub',
               href: 'https://github.com/Salman-ts/ai-book',
+            },
+            {
+              label: '🐦 Twitter',
+              href: 'https://twitter.com',
+            },
+            {
+              label: '💬 Discord',
+              href: 'https://discord.gg',
+            },
+            {
+              label: '📺 YouTube',
+              href: 'https://youtube.com',
             },
           ],
         },
       ],
-      copyright: `Copyright © ${new Date().getFullYear()} My Project, Inc. Built with Docusaurus.`,
+      copyright: `Copyright © ${new Date().getFullYear()} Physical AI & Humanoid Robotics. Built with ❤️ using Docusaurus.`,
     },
     prism: {
       theme: prismThemes.github,
       darkTheme: prismThemes.dracula,
       additionalLanguages: ['powershell'],
-      // Optional: Add `showLineNumbers` to all code blocks by default
-      // showLineNumbers: true, 
     },
   },
 };

@@ -49,23 +49,6 @@ The "sim-to-real gap" is a critical concept in robotics. It refers to the challe
 +----------------+                         +---------------+
 ```
 
-### System Diagram
-
-```ascii
-+----------------+      ROS 2 Topics       +---------------+
-|                | (Control, Telemetry) |               |
-|  Physical      |<---------------------->|   Digital     |
-|  Robot         |                        |   Twin        |
-|                | <--------------------->|               |
-+----------------+      (Sensors)        +---------------+
-       |                                       |
-       | Interacts with                          | Simulates
-       v                                       v
-+----------------+                         +---------------+
-|  Real World    |                         | Virtual World |
-+----------------+                         +---------------+
-```
-
 ---
 
 ## Thought Exercise: The Humanoid Delivery Bot

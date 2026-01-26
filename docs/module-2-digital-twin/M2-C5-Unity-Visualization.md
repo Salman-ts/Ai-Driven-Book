@@ -47,34 +47,6 @@ This architecture allows your core simulation (Gazebo) and your high-fidelity vi
                                           +------------------------+
 ```
 
-### System Diagram
-
-```ascii
-+------------------------+
-|    Gazebo Simulation   |
-| (Physics & Control)    |
-+------------------------+
-    |           ^
-    |           |
-    v           |
-+------------------------+
-| ROS 2 Graph (/tf, etc.)|
-+------------------------+
-    |           ^
-    | Forwards  | Receives
-    v           |
-+------------------------+      TCP/IP      +------------------------+
-|  ros_tcp_endpoint      |<---------------->| ROS-TCP-Connector      |
-|  (ROS 2 Node)          |                  | (Unity Script)         |
-+------------------------+                  +------------------------+
-                                                   |
-                                                   v
-                                          +------------------------+
-                                          |     Unity Engine       |
-                                          | (High-Fidelity Render) |
-                                          +------------------------+
-```
-
 ---
 
 ## Lab: Visualizing Your Robot in Unity

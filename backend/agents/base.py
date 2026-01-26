@@ -1,5 +1,5 @@
 from typing import List, Callable, Any, Dict, Optional
-from pydantic import BaseModel, Field
+from pydantic import BaseModel
 from openai import AsyncOpenAI
 from app.core.config import settings
 import json
@@ -13,23 +13,29 @@ class AgentSkill(BaseModel):
 
 class ChatKitAgent:
     """
-    Wrapper around OpenAI Assistants API (Agents).
+    Wrapper around OpenAI SDK targeting Google Gemini API.
     """
-    def __init__(self, name: str, role: str, model: str = "gpt-4-turbo-preview"):
+    def __init__(self, name: str, role: str, model: str = "gemini-1.5-flash"):
         self.name = name
         self.role = role
         self.model = model
-        self.client = AsyncOpenAI(api_key=settings.OPENAI_API_KEY)
+        # Configure OpenAI client for Gemini
+        self.client = AsyncOpenAI(
+            api_key=settings.GEMINI_API_KEY,
+            base_url="https://generativelanguage.googleapis.com/v1beta/openai/"
+        )
         self.skills: List[AgentSkill] = []
-        self.assistant_id: Optional[str] = None
+        self.history = []
         
     def add_skill(self, skill: AgentSkill):
         self.skills.append(skill)
 
     async def initialize(self):
-        """Register the assistant with OpenAI."""
-        tools = [{"type": "code_interpreter"}] # Built-in default
-        # Add custom function tools
+        # No explicit init needed for stateless REST API, but keeping for interface compat
+        print(f"Agent {self.name} initialized with model: {self.model} via OpenAI SDK")
+
+    def _get_tools(self):
+        tools = []
         for skill in self.skills:
             tools.append({
                 "type": "function",
@@ -39,92 +45,78 @@ class ChatKitAgent:
                     "parameters": skill.parameters
                 }
             })
-            
-        assistant = await self.client.beta.assistants.create(
-            name=self.name,
-            instructions=f"You are {self.name}. {self.role}",
+        return tools if tools else None
+
+    async def run_stream(self, content: str):
+        """
+        Sends a message and streams the response.
+        """
+        messages = [{"role": "system", "content": f"You are {self.name}. {self.role}"}]
+        messages.extend(self.history)
+        messages.append({"role": "user", "content": content})
+        
+        # Tools configuration
+        tools = self._get_tools()
+        
+        response = await self.client.chat.completions.create(
+            model=self.model,
+            messages=messages,
             tools=tools,
-            model=self.model
-        )
-        self.assistant_id = assistant.id
-        print(f"Agent {self.name} initialized with ID: {self.assistant_id}")
-
-    async def create_thread(self):
-        thread = await self.client.beta.threads.create()
-        return thread.id
-
-    async def run_stream(self, thread_id: str, content: str):
-        """
-        Sends a message to the thread and streams the response.
-        Handles tool calls automatically.
-        """
-        await self.client.beta.threads.messages.create(
-            thread_id=thread_id,
-            role="user",
-            content=content
-        )
-
-        stream = await self.client.beta.threads.runs.create(
-            thread_id=thread_id,
-            assistant_id=self.assistant_id,
             stream=True
         )
         
-        async for event in stream:
-            # Simple wrapper to yield text deltas
-            # In a full implementation, need to handle 'requires_action' for function calls
-            # For this 'ChatKit' stub, we'll focus on text streaming first.
-            if event.event == 'thread.message.delta':
-                yield event.data.delta.content[0].text.value
-            elif event.event == 'thread.run.requires_action':
-                # TODO: Handle tool outputs submission
-                pass
+        async for chunk in response:
+            if chunk.choices[0].delta.content:
+                yield chunk.choices[0].delta.content
 
-    # Helper for simple output
-    async def run(self, input_text: str):
-        if not self.assistant_id:
-            await self.initialize()
+    async def run(self, input_text: str) -> str:
+        """
+        Non-streaming run with automatic tool calling loop.
+        """
+        messages = [{"role": "system", "content": f"You are {self.name}. {self.role}"}]
+        messages.extend(self.history)
+        messages.append({"role": "user", "content": input_text})
+        
+        tools = self._get_tools()
+        
+        response = await self.client.chat.completions.create(
+            model=self.model,
+            messages=messages,
+            tools=tools
+        )
+        
+        response_msg = response.choices[0].message
+        
+        # Check for tool calls
+        if response_msg.tool_calls:
+            # Append assistant message with tool calls
+            messages.append(response_msg)
             
-        thread_id = await self.create_thread()
-        
-        # Simple non-streaming run for internal tools
-        await self.client.beta.threads.messages.create(
-            thread_id=thread_id,
-            role="user",
-            content=input_text
-        )
-        
-        run = await self.client.beta.threads.runs.create_and_poll(
-            thread_id=thread_id,
-            assistant_id=self.assistant_id,
-        )
-        
-        # Simple tool handling loop (basic implementation)
-        if run.status == 'requires_action':
-            tool_outputs = []
-            for tool_call in run.required_action.submit_tool_outputs.tool_calls:
+            for tool_call in response_msg.tool_calls:
                 # Find matching skill
                 skill = next((s for s in self.skills if s.name == tool_call.function.name), None)
                 if skill:
                     args = json.loads(tool_call.function.arguments)
-                    output = str(skill.function(**args))
-                    tool_outputs.append({
+                    function_response = str(skill.function(**args))
+                    
+                    messages.append({
                         "tool_call_id": tool_call.id,
-                        "output": output
+                        "role": "tool",
+                        "name": tool_call.function.name,
+                        "content": function_response,
                     })
             
-            if tool_outputs:
-                run = await self.client.beta.threads.runs.submit_tool_outputs_and_poll(
-                    thread_id=thread_id,
-                    run_id=run.id,
-                    tool_outputs=tool_outputs
-                )
-
-        if run.status == 'completed':
-            messages = await self.client.beta.threads.messages.list(
-                thread_id=thread_id
+            # Follow up request to get final answer
+            second_response = await self.client.chat.completions.create(
+                model=self.model,
+                messages=messages
             )
-            return messages.data[0] # Return latest message
+            final_content = second_response.choices[0].message.content
+            self.history.append({"role": "user", "content": input_text})
+            self.history.append({"role": "assistant", "content": final_content})
+            return final_content
         else:
-            return f"Run status: {run.status}"
-
+            content = response_msg.content
+            self.history.append({"role": "user", "content": input_text})
+            self.history.append({"role": "assistant", "content": content})
+            return content

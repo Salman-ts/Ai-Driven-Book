@@ -1,73 +1,55 @@
-<!-- Sync Impact Report:
-Version change: 0.0.1 → 1.0.0
-Modified principles: All principles, key standards, and constraints have been updated to reflect the new project scope.
-Added sections: None (existing sections were fully updated).
-Removed sections: None.
-Templates requiring updates:
-- .specify/templates/plan-template.md: ⚠ pending (review for alignment with new principles)
-- .specify/templates/spec-template.md: ⚠ pending (review for alignment with new principles)
-- .specify/templates/tasks-template.md: ⚠ pending (review for alignment with new principles)
-- .specify/templates/commands/*.md: ✅ updated (generic references maintained)
-- README.md: ⚠ pending (review for alignment with new project name and scope)
-Follow-up TODOs: None
--->
-# AI/Spec-Driven Book Creation using Docusaurus, GitHub Pages, Spec-Kit Plus, and Claude Code Constitution
+# [PROJECT_NAME] Constitution
+<!-- Example: Spec Constitution, TaskFlow Constitution, etc. -->
 
 ## Core Principles
 
-### I. Technical Accuracy
-All explanations, tutorials, and examples MUST reflect modern AI-native software development practices and correct use of Docusaurus, GitHub Pages, and Spec-Kit Plus.
+### [PRINCIPLE_1_NAME]
+<!-- Example: I. Library-First -->
+[PRINCIPLE_1_DESCRIPTION]
+<!-- Example: Every feature starts as a standalone library; Libraries must be self-contained, independently testable, documented; Clear purpose required - no organizational-only libraries -->
 
-### II. Clarity for Learners
-Content MUST be understandable to readers with basic–mid technical background (CS students, developers, and AI enthusiasts).
+### [PRINCIPLE_2_NAME]
+<!-- Example: II. CLI Interface -->
+[PRINCIPLE_2_DESCRIPTION]
+<!-- Example: Every library exposes functionality via CLI; Text in/out protocol: stdin/args → stdout, errors → stderr; Support JSON + human-readable formats -->
 
-### III. Practicality
-Every chapter MUST include actionable steps, reproducible instructions, and working examples.
+### [PRINCIPLE_3_NAME]
+<!-- Example: III. Test-First (NON-NEGOTIABLE) -->
+[PRINCIPLE_3_DESCRIPTION]
+<!-- Example: TDD mandatory: Tests written → User approved → Tests fail → Then implement; Red-Green-Refactor cycle strictly enforced -->
 
-### IV. Consistency
-Maintain uniform terminology, narrative tone, formatting, and file structure across the entire book.
+### [PRINCIPLE_4_NAME]
+<!-- Example: IV. Integration Testing -->
+[PRINCIPLE_4_DESCRIPTION]
+<!-- Example: Focus areas requiring integration tests: New library contract tests, Contract changes, Inter-service communication, Shared schemas -->
 
-### V. Documentation Quality
-Follow best practices for developer documentation, including clear sections, helpful diagrams, and cross-references.
+### [PRINCIPLE_5_NAME]
+<!-- Example: V. Observability, VI. Versioning & Breaking Changes, VII. Simplicity -->
+[PRINCIPLE_5_DESCRIPTION]
+<!-- Example: Text I/O ensures debuggability; Structured logging required; Or: MAJOR.MINOR.BUILD format; Or: Start simple, YAGNI principles -->
 
-## Key Standards
+### [PRINCIPLE_6_NAME]
 
-### Factual Claims
-MUST be verifiable via official documentation, recognized standards, or authoritative technical references.
 
-### Citation Style
-Use short inline citations where necessary (docs, official sources, or research references).
+[PRINCIPLE__DESCRIPTION]
 
-### Source Types
-Prefer official tool documentation (Docusaurus, GitHub Pages, Spec-Kit Plus); supplement with reputable dev/blog sources where appropriate.
+## [SECTION_2_NAME]
+<!-- Example: Additional Constraints, Security Requirements, Performance Standards, etc. -->
 
-### Code & Config Examples
-All code blocks MUST be tested, runnable, and version-correct.
+[SECTION_2_CONTENT]
+<!-- Example: Technology stack requirements, compliance standards, deployment policies, etc. -->
 
-### File/Folder Structures
-Provide accurate Docusaurus and GitHub Pages layouts matching real project scaffolding.
+## [SECTION_3_NAME]
+<!-- Example: Development Workflow, Review Process, Quality Gates, etc. -->
 
-### Writing Level
-Clear, instructional tone equivalent to Flesch-Kincaid grade 9–12.
-
-## Constraints
-
-### Format
-- Output in Markdown compatible with Docusaurus.
-- Use headings that map cleanly to sidebar navigation.
-- Include code blocks in correct syntax highlighting (e.g., bash, json, tsx).
-
-### Content Requirements
-- Include conceptual chapters + hands-on guided tutorials.
-- Include screenshots or diagram instructions (text descriptions only).
-- All chapters MUST strictly follow Spec-Kit Plus spec-driven writing workflow.
-
-### Deployment Constraints
-- Final book MUST build cleanly with Docusaurus.
-- GitHub Pages deployment instructions MUST be precise and complete.
+[SECTION_3_CONTENT]
+<!-- Example: Code review requirements, testing gates, deployment approval process, etc. -->
 
 ## Governance
+<!-- Example: Constitution supersedes all other practices; Amendments require documentation, approval, migration plan -->
 
-This Constitution supersedes all other project practices for the AI/Spec-Driven Book Creation. Any amendments require a documented proposal, review, and approval from the primary author(s), alongside a clear rationale for the change. All content MUST explicitly verify compliance with these principles.
+[GOVERNANCE_RULES]
+<!-- Example: All PRs/reviews must verify compliance; Complexity must be justified; Use [GUIDANCE_FILE] for runtime development guidance -->
 
-**Version**: 1.0.0 | **Ratified**: 2025-12-06 | **Last Amended**: 2025-12-06
+**Version**: [CONSTITUTION_VERSION] | **Ratified**: [RATIFICATION_DATE] | **Last Amended**: [LAST_AMENDED_DATE]
+<!-- Example: Version: 2.1.1 | Ratified: 2025-06-13 | Last Amended: 2025-07-16 -->

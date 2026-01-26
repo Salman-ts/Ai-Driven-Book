@@ -1,34 +1,86 @@
-from fastapi import APIRouter, Depends, Body
-from app.services.personalization import content_service
-from app.services.auth import get_current_user
+from fastapi import APIRouter, Body, HTTPException
 from pydantic import BaseModel
+from openai import AsyncOpenAI
+from app.core.config import settings
 
 router = APIRouter()
+
+# Initialize Gemini client
+client = AsyncOpenAI(
+    api_key=settings.GEMINI_API_KEY,
+    base_url="https://generativelanguage.googleapis.com/v1beta/openai/"
+)
 
 class ContentRequest(BaseModel):
     content: str
 
 @router.post("/personalize")
-async def personalize_chapter(
-    request: ContentRequest,
-    user: dict = Depends(get_current_user)
-):
-    # In a real app, fetch profile from DB. Using mock profile from auth/request for now or assume passed.
-    # We will assume we fetch the full profile here or the user object has it.
-    # For speed, let's mock the profile fetch if not in user dict.
-    user_profile = {
-        "software_skill": "expert", # TODO: Fetch from DB using user['id']
-        "hardware_skill": "raspberry pi",
-        "learning_goal": "build a drone"
-    }
-    
-    personalized_content = await content_service.personalize_chapter(request.content, user_profile)
-    return {"content": personalized_content}
+async def personalize_chapter(request: ContentRequest):
+    """
+    Personalize chapter content for the user's skill level.
+    Temporarily without auth for easier testing.
+    """
+    try:
+        prompt = f"""You are an expert educational content adapter.
+        
+Learner Profile:
+- Software Skill: Intermediate
+- Hardware: Simulation Only
+- Goal: Learn robotics fundamentals
+
+Task:
+Rewrite the following technical content to be more engaging and easier to understand.
+Add helpful analogies and practical examples where useful.
+
+Original Content:
+{request.content[:3000]}
+
+Rewritten Content:
+"""
+        
+        response = await client.chat.completions.create(
+            model="gemini-1.5-flash",
+            messages=[{"role": "user", "content": prompt}],
+            max_tokens=2000
+        )
+        
+        return {"personalized_content": response.choices[0].message.content}
+        
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Personalization error: {str(e)}")
+
 
 @router.post("/translate")
-async def translate_chapter(
-    request: ContentRequest,
-    user: dict = Depends(get_current_user)
-):
-    translated_content = await content_service.translate_to_urdu(request.content)
-    return {"content": translated_content}
+async def translate_chapter(request: ContentRequest):
+    """
+    Translate chapter content to Urdu.
+    """
+    try:
+        prompt = f"""You are an expert translator specializing in technical content.
+
+Translate the following robotics educational content to Urdu.
+Keep technical terms in English but explain them in Urdu context.
+Maintain the educational and engaging tone.
+
+Original (English):
+{request.content[:3000]}
+
+Urdu Translation:
+"""
+        
+        response = await client.chat.completions.create(
+            model="gemini-1.5-flash",
+            messages=[{"role": "user", "content": prompt}],
+            max_tokens=2000
+        )
+        
+        return {"translated_content": response.choices[0].message.content}
+        
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Translation error: {str(e)}")
+
+
+@router.get("/health")
+async def content_health():
+    """Health check for content service."""
+    return {"status": "healthy", "service": "content"}

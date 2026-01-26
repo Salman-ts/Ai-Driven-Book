@@ -40,26 +40,6 @@ The orchestrator node is the heart of your VLA system. It acts as the intelligen
 +-----------------------------+      +------------------+
 ```
 
-### System Diagram: The Final Assembly
-
-```ascii
-+-------------+      +----------------+      +------------------+
-| Microphone  |----->| Audio Node     |----->|   STT Node       |
-+-------------+      +----------------+      +------------------+
-                                                   |
-                                                   | Publishes /voice/command
-                                                   v
-+-----------------------------+             +------------------+
-|       LLM API               |<----------->| Orchestrator Node|
-| (e.g., OpenAI)              |   (Sends      +------------------+
-+-----------------------------+    prompt,         |
-                                  gets plan)       | Calls Actions
-                                                   v
-+-----------------------------+      +------------------+
-| Nav2 Action Server          |<-----| Grasping Service |
-+-----------------------------+      +------------------+
-```
-
 ---
 
 ## Lab: The Final Capstone — A Voice-Controlled Robot

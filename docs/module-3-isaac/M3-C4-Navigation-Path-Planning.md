@@ -44,27 +44,6 @@ Behavior Trees offer a modular and robust way to design complex robot behaviors.
 +----------------+
 ```
 
-### System Diagram
-
-```ascii
-+----------------+      +----------------+
-|   Goal Pose    |----->|  BT Navigator  |
-| (From RViz2)   |      +----------------+
-+----------------+       |           |
-                         | Controls  | Gets robot pose
-                         v           ^
-+----------------+      +----------------+      +----------------+
-| Local Planner  |<---->|  Costmaps      |<---->|    AMCL        |
-+----------------+      +----------------+      +----------------+
-      |                                                ^
-      | Sends velocity commands                        | Reads /scan & /tf
-      v                                                |
-+----------------+                             +----------------+
-|  Robot Base    |                             | LIDAR & Odometry |
-| (/cmd_vel)     |                             +----------------+
-+----------------+
-```
-
 ---
 
 ## Lab: Autonomous Navigation in Isaac Sim
