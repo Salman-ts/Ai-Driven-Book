@@ -39,7 +39,7 @@ Rewritten Content:
 """
         
         response = await client.chat.completions.create(
-            model="gemini-1.5-flash",
+            model="gemini-2.0-flash",
             messages=[{"role": "user", "content": prompt}],
             max_tokens=2000
         )
@@ -69,7 +69,7 @@ Urdu Translation:
 """
         
         response = await client.chat.completions.create(
-            model="gemini-1.5-flash",
+            model="gemini-2.0-flash",
             messages=[{"role": "user", "content": prompt}],
             max_tokens=2000
         )

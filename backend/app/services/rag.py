@@ -30,7 +30,8 @@ class RAGService:
     def __init__(self):
         self.qdrant = QdrantClient(
             url=settings.QDRANT_URL,
-            api_key=settings.QDRANT_API_KEY
+            api_key=settings.QDRANT_API_KEY,
+            check_compatibility=False
         )
         self.client = cohere.ClientV2(api_key=settings.COHERE_API_KEY)
         self.collection_name = "ai_book_chunks_cohere"
@@ -131,20 +132,22 @@ class RAGService:
         if response.message.citations:
             for cit in response.message.citations:
                 # Map citations back to our source documents
-                # Cohere citations return indices of 'documents' list used
-                for doc_idx in cit.document_ids:
-                    # doc_idx is like "doc_0", "doc_1"
+                # Cohere v2 citations use 'sources' with document IDs like "doc_0", "doc_1"
+                citation_sources = getattr(cit, 'sources', None) or []
+                for source_ref in citation_sources:
+                    # source_ref can be a string like "doc_0" or an object with id attribute
+                    doc_id = source_ref if isinstance(source_ref, str) else getattr(source_ref, 'id', str(source_ref))
                     try:
-                        idx = int(doc_idx.split('_')[1])
+                        idx = int(doc_id.split('_')[1]) if '_' in doc_id else int(doc_id.replace('doc', ''))
                         if 0 <= idx < len(documents):
                             src_doc = documents[idx]["data"]
                             sources.append({
                                 "title": src_doc.get("title"),
                                 "url": src_doc.get("url"),
-                                "score": 1.0, # Placeholder, Cohere doesn't give per-citation relevance score easily here
+                                "score": 1.0,  # Placeholder
                                 "snippet": cit.text 
                             })
-                    except:
+                    except (ValueError, IndexError, AttributeError):
                         continue
                         
         # Deduplicate sources

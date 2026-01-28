@@ -8,7 +8,7 @@ class PersonalizationService:
             api_key=settings.GEMINI_API_KEY,
             base_url="https://generativelanguage.googleapis.com/v1beta/openai/"
         )
-        self.model = "gemini-1.5-pro-latest"
+        self.model = "gemini-2.0-flash"
 
     async def personalize_content(
         self, 
