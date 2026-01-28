@@ -2,7 +2,9 @@
  * API Service - Centralized backend API calls
  */
 
-const API_URL = 'http://localhost:8000';
+const API_URL = typeof window !== 'undefined' 
+  ? (window as any).__API_URL__ || 'http://localhost:8000'
+  : 'http://localhost:8000';
 
 // Helper to get auth token
 export const getAuthToken = (): string | null => {

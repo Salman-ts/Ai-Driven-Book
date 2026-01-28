@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './FeatureToggles.css';
+import { translateContent, personalizeContent } from '../services/api';
 
 interface FeatureTogglesProps {
     chapterId?: string;
@@ -47,21 +48,12 @@ const FeatureToggles: React.FC<FeatureTogglesProps> = ({
 
         setIsTranslating(true);
         try {
-            const response = await fetch('http://localhost:8000/content/translate', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': 'Bearer mock-token'
-                },
-                body: JSON.stringify({
-                    content: currentContent || document.querySelector('article')?.textContent?.slice(0, 2000),
-                    target_language: 'urdu'
-                })
-            });
+            const data = await translateContent(
+                currentContent || document.querySelector('article')?.textContent?.slice(0, 2000) || '',
+                'urdu'
+            );
 
-            if (!response.ok) throw new Error('Translation failed');
 
-            const data = await response.json();
             setTranslatedContent(data.translated_content);
             onContentChange?.(data.translated_content);
             showNotification('✨ Translated to Urdu');
@@ -85,22 +77,13 @@ const FeatureToggles: React.FC<FeatureTogglesProps> = ({
 
         setIsPersonalizing(true);
         try {
-            const response = await fetch('http://localhost:8000/content/personalize', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': 'Bearer mock-token'
-                },
-                body: JSON.stringify({
-                    content: currentContent || document.querySelector('article')?.textContent?.slice(0, 2000),
-                    user_level: 'intermediate',
-                    interests: ['robotics', 'AI']
-                })
-            });
+            const data = await personalizeContent(
+                currentContent || document.querySelector('article')?.textContent?.slice(0, 2000) || '',
+                'intermediate',
+                ['robotics', 'AI']
+            );
 
-            if (!response.ok) throw new Error('Personalization failed');
 
-            const data = await response.json();
             setPersonalizedContent(data.personalized_content);
             onContentChange?.(data.personalized_content);
             showNotification('✨ Content personalized for you');

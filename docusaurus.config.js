@@ -30,6 +30,13 @@ const config = {
     locales: ['en'],
   },
 
+  scripts: [
+    {
+      src: '/api-config.js',
+      async: false,
+    },
+  ],
+
   presets: [
     [
       'classic',

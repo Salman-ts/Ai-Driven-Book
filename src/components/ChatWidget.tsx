@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import clsx from 'clsx';
 import './ChatWidget.css';
+import { sendChatMessage } from '../services/api';
 
 interface Message {
     role: 'user' | 'assistant';
@@ -69,15 +70,7 @@ const ChatWidget = () => {
         setLoading(true);
 
         try {
-            const token = typeof window !== 'undefined' ? localStorage.getItem('auth_token') : null;
-            const response = await fetch('http://localhost:8000/chat/message', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token || 'anonymous'}`
-                },
-                body: JSON.stringify({ query: userMsg, history: messages })
-            });
+            const response = await sendChatMessage(userMsg, messages);
 
             if (!response.ok) throw new Error('Network response was not ok');
 

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { translateContent, personalizeContent } from '../services/api';
 
 const ChapterControls = () => {
     const [isPersonalized, setIsPersonalized] = useState(false);
@@ -8,20 +9,11 @@ const ChapterControls = () => {
 
     const handlePersonalize = async () => {
         setLoading(true);
-        // Get current page content logic (simplified: user needs to pass context or we select dom)
-        // For Docusaurus, often we operate on the MDX content passed as props or via context.
-        // Here we'll simulate fetching/sending.
-
         try {
             const currentContent = document.querySelector('article')?.innerText || "Chapter Content";
+            const data = await personalizeContent(currentContent);
 
-            const res = await fetch('http://localhost:8000/content/personalize', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ content: currentContent })
-            });
-            const data = await res.json();
-            setContent(data.content);
+            setContent(data.personalized_content || data.content);
             setIsPersonalized(true);
             setIsUrdu(false);
         } catch (e) {
@@ -35,14 +27,9 @@ const ChapterControls = () => {
         setLoading(true);
         try {
             const currentContent = document.querySelector('article')?.innerText || "Chapter Content";
+            const data = await translateContent(currentContent, 'urdu');
 
-            const res = await fetch('http://localhost:8000/content/translate', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ content: currentContent })
-            });
-            const data = await res.json();
-            setContent(data.content);
+            setContent(data.translated_content || data.content);
             setIsUrdu(true);
             setIsPersonalized(false);
         } catch (e) {
